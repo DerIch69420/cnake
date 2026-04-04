@@ -26,6 +26,7 @@ typedef enum {
 static SnakeNode *head;
 static SnakeNode *tail;
 static int gameRunning = 1;
+static Direction currentDirection = RIGHT;
 
 static void _setup();
 static void _tick();
@@ -130,15 +131,31 @@ static void _do_action(PlayerAction action) {
     gameRunning = 0;
     return;
   case MOVE_LEFT:
+    // No 180 degree turn
+    if (currentDirection == RIGHT) {
+      return;
+    }
     _move(LEFT);
     return;
   case MOVE_RIGHT:
+    // No 180 degree turn
+    if (currentDirection == LEFT) {
+      return;
+    }
     _move(RIGHT);
     return;
   case MOVE_UP:
+    // No 180 degree turn
+    if (currentDirection == DOWN) {
+      return;
+    }
     _move(UP);
     return;
   case MOVE_DOWN:
+    // No 180 degree turn
+    if (currentDirection == UP) {
+      return;
+    }
     _move(DOWN);
     return;
   case NONE:
@@ -167,6 +184,8 @@ static void _move(Direction direction) {
     break;
   }
   }
+
+  currentDirection = direction;
 
   tail = free_tail(tail);
   _check_colliding();
