@@ -6,27 +6,46 @@
 
 #include "game.h"
 
-static void _setup(int x, int y);
-static void _tick(int x, int y, int key);
+typedef enum {
+  NONE,
+  QUIT,
+  MOVE_LEFT,
+  MOVE_RIGHT,
+  MOVE_UP,
+  MOVE_DOWN,
+} PlayerAction;
+
+typedef enum {
+  LEFT,
+  RIGHT,
+  UP,
+  DOWN,
+} Direction;
+
+static int playerX = START_X;
+static int playerY = START_Y;
+static int gameRunning = 1;
+
+static void _setup();
+static void _tick();
 
 static void _draw_borders();
-static int _user_input();
+static PlayerAction _user_input(int key);
+static void _do_action(PlayerAction action);
+static void _move(Direction direction);
 
 void run_cnake() {
-  int x, y, key;
 
-  x = START_X;
-  y = START_Y;
-  _setup(x, y);
+  _setup();
 
-  _tick(x, y, key);
+  _tick();
 }
 
-static void _setup(int x, int y) {
+static void _setup() {
 
   clear();
 
-  move(y, x);
+  move(playerY, playerX);
   attron(COLOR_PAIR(1));
   printw("%c", PLAYER_HEAD);
   attroff(COLOR_PAIR(1));
@@ -36,39 +55,18 @@ static void _setup(int x, int y) {
   refresh();
 }
 
-static void _tick(int x, int y, int key) {
+static void _tick() {
+  int key;
+  PlayerAction action;
 
   while ((key = getch()) != 'q') {
 
-    if (key == KEY_LEFT) {
-      // Move to the left
-      x--;
-      if (x < X_MIN) {
-        x = X_MIN;
-      }
-    } else if (key == KEY_RIGHT) {
-      // Move to the right
-      x++;
-      if (x > X_MAX) {
-        x = X_MAX;
-      }
-    } else if (key == KEY_UP) {
-      // Move upwards
-      y--;
-      if (y < Y_MIN) {
-        y = Y_MIN;
-      }
-    } else if (key == KEY_DOWN) {
-      // Move downwards
-      y++;
-      if (y > Y_MAX) {
-        y = Y_MAX;
-      }
-    }
+    action = _user_input(key);
+    _do_action(action);
 
     clear();
 
-    move(y, x);
+    move(playerY, playerX);
     attron(COLOR_PAIR(1));
     addch(PLAYER_HEAD);
     attroff(COLOR_PAIR(1));
@@ -96,4 +94,84 @@ static void _draw_borders() {
   mvaddch(Y_MIN - 1, X_MAX + 1, ACS_URCORNER);
   mvaddch(Y_MAX + 1, X_MIN - 1, ACS_LLCORNER);
   mvaddch(Y_MAX + 1, X_MAX + 1, ACS_LRCORNER);
+}
+
+static PlayerAction _user_input(int key) {
+  // Map user input to corresponding action
+
+  switch (key) {
+  case 'q':
+    return QUIT;
+  case KEY_LEFT:
+  case 'a':
+    return MOVE_LEFT;
+  case KEY_RIGHT:
+  case 'd':
+    return MOVE_RIGHT;
+  case KEY_UP:
+  case 'w':
+    return MOVE_UP;
+  case KEY_DOWN:
+  case 's':
+    return MOVE_DOWN;
+  default:
+    return NONE;
+  }
+}
+
+static void _do_action(PlayerAction action) {
+  switch (action) {
+  case QUIT:
+    gameRunning = 0;
+    return;
+  case MOVE_LEFT:
+    _move(LEFT);
+    return;
+  case MOVE_RIGHT:
+    _move(RIGHT);
+    return;
+  case MOVE_UP:
+    _move(UP);
+    return;
+  case MOVE_DOWN:
+    _move(DOWN);
+    return;
+  case NONE:
+    return;
+  }
+}
+
+static void _move(Direction direction) {
+  switch (direction) {
+  case LEFT: {
+    playerX--;
+    if (playerX < X_MIN) {
+      playerX = X_MIN;
+    }
+    return;
+  }
+
+  case RIGHT: {
+    playerX++;
+    if (playerX > X_MAX) {
+      playerX = X_MAX;
+    }
+    return;
+  }
+
+  case UP: {
+    playerY--;
+    if (playerY < Y_MIN) {
+      playerY = Y_MIN;
+    }
+    return;
+  }
+  case DOWN: {
+    playerY++;
+    if (playerY > Y_MAX) {
+      playerY = Y_MAX;
+    }
+    return;
+  }
+  }
 }
