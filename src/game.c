@@ -3,6 +3,7 @@
  */
 
 #include <ncurses.h>
+#include <stdbool.h>
 
 #include "food.h"
 #include "game.h"
@@ -42,7 +43,7 @@ static void _move(Direction direction);
 static void _check_colliding();
 static void _collide_with_wall();
 static void _collide_with_self();
-static void _check_food();
+static bool _check_food();
 
 void run_cnake() {
 
@@ -195,9 +196,11 @@ static void _move(Direction direction) {
 
   currentDirection = direction;
 
-  tail = free_tail(tail);
   _check_colliding();
-  _check_food();
+
+  if (!_check_food()) {
+    tail = free_tail(tail);
+  }
 }
 
 static void _draw_snake() {
@@ -213,7 +216,11 @@ static void _draw_snake() {
   attroff(COLOR_PAIR(1));
 }
 
-static void _draw_food() { mvaddch(food->y, food->x, FOOD); }
+static void _draw_food() {
+  attron(COLOR_PAIR(2));
+  mvaddch(food->y, food->x, FOOD);
+  attroff(COLOR_PAIR(2));
+}
 
 static void _check_colliding() {
   // Colliding with wall
@@ -233,9 +240,11 @@ static void _check_colliding() {
 static void _collide_with_wall() { gameRunning = 0; }
 static void _collide_with_self() { gameRunning = 0; }
 
-static void _check_food() {
+static bool _check_food() {
   if ((food->x == head->x) && (food->y == head->y)) {
     food = generate_food(X_MIN, X_MAX, Y_MIN, Y_MAX);
-    tail = add_segment(tail, tail->x, tail->y);
+    return TRUE;
+  } else {
+    return FALSE;
   }
 }
