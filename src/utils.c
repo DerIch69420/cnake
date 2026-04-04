@@ -3,10 +3,15 @@
  */
 
 #include <ncurses.h>
+#include <stdlib.h>
+#include <time.h>
 
 #include "utils.h"
 
 void init_cnake() {
+
+  srand(time(NULL));
+
   initscr();
   keypad(stdscr, TRUE); // Enable keypad
   noecho();             // Don't echo input

@@ -16,4 +16,7 @@
 #define PLAYER_HEAD 'O'
 #define PLAYER_TAIL 'o'
 
+/* Food character */
+#define FOOD '@'
+
 void run_cnake();

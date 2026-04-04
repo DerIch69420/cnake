@@ -4,6 +4,7 @@
 
 #include <ncurses.h>
 
+#include "food.h"
 #include "game.h"
 #include "snake.h"
 
@@ -25,6 +26,7 @@ typedef enum {
 
 static SnakeNode *head;
 static SnakeNode *tail;
+static Food *food;
 static int gameRunning = 1;
 static Direction currentDirection = RIGHT;
 
@@ -33,12 +35,14 @@ static void _tick();
 
 static void _draw_borders();
 static void _draw_snake();
+static void _draw_food();
 static PlayerAction _user_input(int key);
 static void _do_action(PlayerAction action);
 static void _move(Direction direction);
 static void _check_colliding();
 static void _collide_with_wall();
 static void _collide_with_self();
+static void _check_food();
 
 void run_cnake() {
 
@@ -59,8 +63,11 @@ static void _setup() {
   tail = add_segment(tail, START_X - 3, START_Y);
   head = push_head(head, START_X + 1, START_Y);
 
+  food = generate_food(X_MIN, X_MAX, Y_MIN, Y_MAX);
+
   _draw_snake();
   _draw_borders();
+  _draw_food();
 
   refresh();
 }
@@ -78,6 +85,7 @@ static void _tick() {
 
     _draw_snake();
     _draw_borders();
+    _draw_food();
     refresh();
   }
 }
@@ -189,6 +197,7 @@ static void _move(Direction direction) {
 
   tail = free_tail(tail);
   _check_colliding();
+  _check_food();
 }
 
 static void _draw_snake() {
@@ -203,6 +212,8 @@ static void _draw_snake() {
   mvaddch(head->y, head->x, PLAYER_HEAD);
   attroff(COLOR_PAIR(1));
 }
+
+static void _draw_food() { mvaddch(food->y, food->x, FOOD); }
 
 static void _check_colliding() {
   // Colliding with wall
@@ -221,3 +232,10 @@ static void _check_colliding() {
 
 static void _collide_with_wall() { gameRunning = 0; }
 static void _collide_with_self() { gameRunning = 0; }
+
+static void _check_food() {
+  if ((food->x == head->x) && (food->y == head->y)) {
+    food = generate_food(X_MIN, X_MAX, Y_MIN, Y_MAX);
+    tail = add_segment(tail, tail->x, tail->y);
+  }
+}
