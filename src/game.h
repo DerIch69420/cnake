@@ -13,8 +13,8 @@
 #define START_Y 5
 
 /* Player characters */
-#define PLAYER_HEAD 'O'
-#define PLAYER_TAIL 'o'
+#define PLAYER_HEAD ACS_CKBOARD
+#define PLAYER_TAIL ACS_CKBOARD
 
 /* Food character */
 #define FOOD '@'
