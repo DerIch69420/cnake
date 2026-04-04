@@ -5,6 +5,7 @@
 #include <ncurses.h>
 
 #include "game.h"
+#include "snake.h"
 
 typedef enum {
   NONE,
@@ -22,12 +23,7 @@ typedef enum {
   DOWN,
 } Direction;
 
-typedef struct {
-  int x;
-  int y;
-} Snake;
-
-static Snake snake;
+static SnakeNode *head;
 static int gameRunning = 1;
 
 static void _setup();
@@ -44,14 +40,17 @@ void run_cnake() {
   _setup();
 
   _tick();
+
+  free_snake(head);
 }
 
 static void _setup() {
 
   clear();
 
-  snake.x = START_X;
-  snake.y = START_Y;
+  head = create_head(START_X, START_Y);
+  add_segment(head, START_X - 1, START_Y - 1);
+  add_segment(head->next, START_X - 2, START_Y - 2);
 
   _draw_snake();
   _draw_borders();
@@ -144,32 +143,32 @@ static void _do_action(PlayerAction action) {
 static void _move(Direction direction) {
   switch (direction) {
   case LEFT: {
-    snake.x--;
-    if (snake.x < X_MIN) {
-      snake.x = X_MIN;
+    head->x--;
+    if (head->x < X_MIN) {
+      head->x = X_MIN;
     }
     return;
   }
 
   case RIGHT: {
-    snake.x++;
-    if (snake.x > X_MAX) {
-      snake.x = X_MAX;
+    head->x++;
+    if (head->x > X_MAX) {
+      head->x = X_MAX;
     }
     return;
   }
 
   case UP: {
-    snake.y--;
-    if (snake.y < Y_MIN) {
-      snake.y = Y_MIN;
+    head->y--;
+    if (head->y < Y_MIN) {
+      head->y = Y_MIN;
     }
     return;
   }
   case DOWN: {
-    snake.y++;
-    if (snake.y > Y_MAX) {
-      snake.y = Y_MAX;
+    head->y++;
+    if (head->y > Y_MAX) {
+      head->y = Y_MAX;
     }
     return;
   }
@@ -177,8 +176,14 @@ static void _move(Direction direction) {
 }
 
 static void _draw_snake() {
-  move(snake.y, snake.x);
+  // Draw head
   attron(COLOR_PAIR(1));
-  addch(PLAYER_HEAD);
+  mvaddch(head->y, head->x, PLAYER_HEAD);
   attroff(COLOR_PAIR(1));
+
+  // Draw rest of body
+  SnakeNode *body = head;
+  while ((body = get_next(body))) {
+    mvaddch(body->y, body->x, PLAYER_TAIL);
+  }
 }
