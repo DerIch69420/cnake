@@ -6,10 +6,11 @@
 
 #include "game.h"
 
-void _setup(int x, int y);
-void _tick(int x, int y, int key);
+static void _setup(int x, int y);
+static void _tick(int x, int y, int key);
 
-void _draw_borders();
+static void _draw_borders();
+static int _user_input();
 
 void run_cnake() {
   int x, y, key;
@@ -21,7 +22,7 @@ void run_cnake() {
   _tick(x, y, key);
 }
 
-void _setup(int x, int y) {
+static void _setup(int x, int y) {
 
   clear();
 
@@ -29,10 +30,13 @@ void _setup(int x, int y) {
   attron(COLOR_PAIR(1));
   printw("%c", PLAYER_HEAD);
   attroff(COLOR_PAIR(1));
+
+  _draw_borders();
+
   refresh();
 }
 
-void _tick(int x, int y, int key) {
+static void _tick(int x, int y, int key) {
 
   while ((key = getch()) != 'q') {
 
@@ -74,7 +78,7 @@ void _tick(int x, int y, int key) {
   }
 }
 
-void _draw_borders() {
+static void _draw_borders() {
   // Horizontal bars
   for (int i = X_MIN; i <= X_MAX; i++) {
     mvaddch(Y_MIN - 1, i, ACS_HLINE);
