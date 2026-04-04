@@ -19,4 +19,7 @@
 /* Food character */
 #define FOOD '@'
 
+/* Game speed */
+#define TICKS_PER_SECOND 10
+
 void run_cnake();

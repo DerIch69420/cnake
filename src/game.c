@@ -77,10 +77,14 @@ static void _tick() {
   int key;
   PlayerAction action;
 
+  timeout((1000 / TICKS_PER_SECOND));
+
   while (gameRunning != 0) {
 
     action = _user_input((key = getch()));
     _do_action(action);
+
+    _move(currentDirection);
 
     clear();
 
@@ -144,28 +148,28 @@ static void _do_action(PlayerAction action) {
     if (currentDirection == RIGHT) {
       return;
     }
-    _move(LEFT);
+    currentDirection = LEFT;
     return;
   case MOVE_RIGHT:
     // No 180 degree turn
     if (currentDirection == LEFT) {
       return;
     }
-    _move(RIGHT);
+    currentDirection = RIGHT;
     return;
   case MOVE_UP:
     // No 180 degree turn
     if (currentDirection == DOWN) {
       return;
     }
-    _move(UP);
+    currentDirection = UP;
     return;
   case MOVE_DOWN:
     // No 180 degree turn
     if (currentDirection == UP) {
       return;
     }
-    _move(DOWN);
+    currentDirection = DOWN;
     return;
   case NONE:
     return;
@@ -193,8 +197,6 @@ static void _move(Direction direction) {
     break;
   }
   }
-
-  currentDirection = direction;
 
   _check_colliding();
 
