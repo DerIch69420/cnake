@@ -1,5 +1,5 @@
 /*
- * src/game.
+ * src/game.c
  */
 
 #include <ncurses.h>
@@ -8,6 +8,8 @@
 
 void _setup(int x, int y);
 void _tick(int x, int y, int key);
+
+void _draw_borders();
 
 void run_cnake() {
   int x, y, key;
@@ -64,8 +66,30 @@ void _tick(int x, int y, int key) {
 
     move(y, x);
     attron(COLOR_PAIR(1));
-    printw("%c", PLAYER_HEAD);
+    addch(PLAYER_HEAD);
     attroff(COLOR_PAIR(1));
+
+    _draw_borders();
     refresh();
   }
+}
+
+void _draw_borders() {
+  // Horizontal bars
+  for (int i = X_MIN; i <= X_MAX; i++) {
+    mvaddch(Y_MIN - 1, i, ACS_HLINE);
+    mvaddch(Y_MAX + 1, i, ACS_HLINE);
+  }
+
+  // Vertical bars
+  for (int i = Y_MIN; i <= Y_MAX; i++) {
+    mvaddch(i, X_MIN - 1, ACS_VLINE);
+    mvaddch(i, X_MAX + 1, ACS_VLINE);
+  }
+
+  // Corners
+  mvaddch(Y_MIN - 1, X_MIN - 1, ACS_ULCORNER);
+  mvaddch(Y_MIN - 1, X_MAX + 1, ACS_URCORNER);
+  mvaddch(Y_MAX + 1, X_MIN - 1, ACS_LLCORNER);
+  mvaddch(Y_MAX + 1, X_MAX + 1, ACS_LRCORNER);
 }
