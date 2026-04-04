@@ -181,14 +181,14 @@ static void _move(Direction direction) {
 }
 
 static void _draw_snake() {
-  // Draw head
-  attron(COLOR_PAIR(1));
-  mvaddch(head->y, head->x, PLAYER_HEAD);
-  attroff(COLOR_PAIR(1));
-
-  // Draw rest of body
+  // Draw body
   SnakeNode *body = head;
   while ((body = get_next(body))) {
     mvaddch(body->y, body->x, PLAYER_TAIL);
   }
+
+  // Draw head
+  attron(COLOR_PAIR(1));
+  mvaddch(head->y, head->x, PLAYER_HEAD);
+  attroff(COLOR_PAIR(1));
 }
