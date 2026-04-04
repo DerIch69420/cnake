@@ -10,6 +10,8 @@ typedef struct SnakeNode {
 } SnakeNode;
 
 SnakeNode *create_head(int x, int y);
-void add_segment(SnakeNode *tail, int x, int y);
+SnakeNode *push_head(SnakeNode *head, int x, int y);
+SnakeNode *add_segment(SnakeNode *tail, int x, int y);
 SnakeNode *get_next(SnakeNode *tail);
+SnakeNode *free_tail(SnakeNode *tail);
 void free_snake(SnakeNode *head);

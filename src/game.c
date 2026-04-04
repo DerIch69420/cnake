@@ -24,6 +24,7 @@ typedef enum {
 } Direction;
 
 static SnakeNode *head;
+static SnakeNode *tail;
 static int gameRunning = 1;
 
 static void _setup();
@@ -49,8 +50,12 @@ static void _setup() {
   clear();
 
   head = create_head(START_X, START_Y);
-  add_segment(head, START_X - 1, START_Y - 1);
-  add_segment(head->next, START_X - 2, START_Y - 2);
+  tail = add_segment(head, START_X - 1, START_Y - 1);
+  tail = add_segment(tail, START_X - 2, START_Y - 2);
+  tail = add_segment(tail, START_X - 3, START_Y - 3);
+  head = push_head(head, START_X + 1, START_Y + 1);
+  tail = free_tail(tail);
+  tail = free_tail(tail);
 
   _draw_snake();
   _draw_borders();
