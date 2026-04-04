@@ -22,14 +22,19 @@ typedef enum {
   DOWN,
 } Direction;
 
-static int playerX = START_X;
-static int playerY = START_Y;
+typedef struct {
+  int x;
+  int y;
+} Snake;
+
+static Snake snake;
 static int gameRunning = 1;
 
 static void _setup();
 static void _tick();
 
 static void _draw_borders();
+static void _draw_player();
 static PlayerAction _user_input(int key);
 static void _do_action(PlayerAction action);
 static void _move(Direction direction);
@@ -45,11 +50,10 @@ static void _setup() {
 
   clear();
 
-  move(playerY, playerX);
-  attron(COLOR_PAIR(1));
-  printw("%c", PLAYER_HEAD);
-  attroff(COLOR_PAIR(1));
+  snake.x = START_X;
+  snake.y = START_Y;
 
+  _draw_player();
   _draw_borders();
 
   refresh();
@@ -66,11 +70,7 @@ static void _tick() {
 
     clear();
 
-    move(playerY, playerX);
-    attron(COLOR_PAIR(1));
-    addch(PLAYER_HEAD);
-    attroff(COLOR_PAIR(1));
-
+    _draw_player();
     _draw_borders();
     refresh();
   }
@@ -144,34 +144,41 @@ static void _do_action(PlayerAction action) {
 static void _move(Direction direction) {
   switch (direction) {
   case LEFT: {
-    playerX--;
-    if (playerX < X_MIN) {
-      playerX = X_MIN;
+    snake.x--;
+    if (snake.x < X_MIN) {
+      snake.x = X_MIN;
     }
     return;
   }
 
   case RIGHT: {
-    playerX++;
-    if (playerX > X_MAX) {
-      playerX = X_MAX;
+    snake.x++;
+    if (snake.x > X_MAX) {
+      snake.x = X_MAX;
     }
     return;
   }
 
   case UP: {
-    playerY--;
-    if (playerY < Y_MIN) {
-      playerY = Y_MIN;
+    snake.y--;
+    if (snake.y < Y_MIN) {
+      snake.y = Y_MIN;
     }
     return;
   }
   case DOWN: {
-    playerY++;
-    if (playerY > Y_MAX) {
-      playerY = Y_MAX;
+    snake.y++;
+    if (snake.y > Y_MAX) {
+      snake.y = Y_MAX;
     }
     return;
   }
   }
+}
+
+static void _draw_player() {
+  move(snake.y, snake.x);
+  attron(COLOR_PAIR(1));
+  addch(PLAYER_HEAD);
+  attroff(COLOR_PAIR(1));
 }
