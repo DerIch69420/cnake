@@ -59,9 +59,9 @@ static void _tick() {
   int key;
   PlayerAction action;
 
-  while ((key = getch()) != 'q') {
+  while (gameRunning != 0) {
 
-    action = _user_input(key);
+    action = _user_input((key = getch()));
     _do_action(action);
 
     clear();
