@@ -50,12 +50,8 @@ static void _setup() {
   clear();
 
   head = create_head(START_X, START_Y);
-  tail = add_segment(head, START_X - 1, START_Y - 1);
-  tail = add_segment(tail, START_X - 2, START_Y - 2);
-  tail = add_segment(tail, START_X - 3, START_Y - 3);
-  head = push_head(head, START_X + 1, START_Y + 1);
-  tail = free_tail(tail);
-  tail = free_tail(tail);
+  tail = add_segment(head, START_X - 1, START_Y);
+  head = push_head(head, START_X + 1, START_Y);
 
   _draw_snake();
   _draw_borders();
@@ -148,36 +144,37 @@ static void _do_action(PlayerAction action) {
 static void _move(Direction direction) {
   switch (direction) {
   case LEFT: {
-    head->x--;
+    head = push_head(head, head->x - 1, head->y);
     if (head->x < X_MIN) {
       head->x = X_MIN;
     }
-    return;
+    break;
   }
 
   case RIGHT: {
-    head->x++;
+    head = push_head(head, head->x + 1, head->y);
     if (head->x > X_MAX) {
       head->x = X_MAX;
     }
-    return;
+    break;
   }
 
   case UP: {
-    head->y--;
+    head = push_head(head, head->x, head->y - 1);
     if (head->y < Y_MIN) {
       head->y = Y_MIN;
     }
-    return;
+    break;
   }
   case DOWN: {
-    head->y++;
+    head = push_head(head, head->x, head->y + 1);
     if (head->y > Y_MAX) {
       head->y = Y_MAX;
     }
-    return;
+    break;
   }
   }
+  tail = free_tail(tail);
 }
 
 static void _draw_snake() {
