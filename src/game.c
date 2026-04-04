@@ -34,7 +34,7 @@ static void _setup();
 static void _tick();
 
 static void _draw_borders();
-static void _draw_player();
+static void _draw_snake();
 static PlayerAction _user_input(int key);
 static void _do_action(PlayerAction action);
 static void _move(Direction direction);
@@ -53,7 +53,7 @@ static void _setup() {
   snake.x = START_X;
   snake.y = START_Y;
 
-  _draw_player();
+  _draw_snake();
   _draw_borders();
 
   refresh();
@@ -70,7 +70,7 @@ static void _tick() {
 
     clear();
 
-    _draw_player();
+    _draw_snake();
     _draw_borders();
     refresh();
   }
@@ -176,7 +176,7 @@ static void _move(Direction direction) {
   }
 }
 
-static void _draw_player() {
+static void _draw_snake() {
   move(snake.y, snake.x);
   attron(COLOR_PAIR(1));
   addch(PLAYER_HEAD);
