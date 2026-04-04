@@ -35,6 +35,9 @@ static void _draw_snake();
 static PlayerAction _user_input(int key);
 static void _do_action(PlayerAction action);
 static void _move(Direction direction);
+static void _check_colliding();
+static void _collide_with_wall();
+static void _collide_with_self();
 
 void run_cnake() {
 
@@ -51,6 +54,8 @@ static void _setup() {
 
   head = create_head(START_X, START_Y);
   tail = add_segment(head, START_X - 1, START_Y);
+  tail = add_segment(tail, START_X - 2, START_Y);
+  tail = add_segment(tail, START_X - 3, START_Y);
   head = push_head(head, START_X + 1, START_Y);
 
   _draw_snake();
@@ -145,36 +150,26 @@ static void _move(Direction direction) {
   switch (direction) {
   case LEFT: {
     head = push_head(head, head->x - 1, head->y);
-    if (head->x < X_MIN) {
-      head->x = X_MIN;
-    }
     break;
   }
 
   case RIGHT: {
     head = push_head(head, head->x + 1, head->y);
-    if (head->x > X_MAX) {
-      head->x = X_MAX;
-    }
     break;
   }
 
   case UP: {
     head = push_head(head, head->x, head->y - 1);
-    if (head->y < Y_MIN) {
-      head->y = Y_MIN;
-    }
     break;
   }
   case DOWN: {
     head = push_head(head, head->x, head->y + 1);
-    if (head->y > Y_MAX) {
-      head->y = Y_MAX;
-    }
     break;
   }
   }
+
   tail = free_tail(tail);
+  _check_colliding();
 }
 
 static void _draw_snake() {
@@ -189,3 +184,21 @@ static void _draw_snake() {
   mvaddch(head->y, head->x, PLAYER_HEAD);
   attroff(COLOR_PAIR(1));
 }
+
+static void _check_colliding() {
+  // Colliding with wall
+  if ((head->x < X_MIN) || (head->x > X_MAX) || (head->y < Y_MIN) ||
+      (head->y > Y_MAX)) {
+    _collide_with_wall();
+  }
+
+  SnakeNode *bodyPart = head;
+  while ((bodyPart = get_next(bodyPart))) {
+    if ((head->x == bodyPart->x) && (head->y == bodyPart->y)) {
+      _collide_with_self();
+    }
+  }
+}
+
+static void _collide_with_wall() { gameRunning = 0; }
+static void _collide_with_self() { gameRunning = 0; }
