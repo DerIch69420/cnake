@@ -9,8 +9,13 @@
 #include "snake.h"
 
 typedef enum {
-  NO_FOOD,
-  NORMAL,
+  // Different types of food
+  FOOD_USELESS,
+  FOOD_NORMAL,
+  FOOD_DOUBLE,
+
+  // Count of different food types
+  FOOD_TYPE_COUNT,
 } FoodType;
 
 typedef struct {

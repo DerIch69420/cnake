@@ -19,7 +19,9 @@
 #define PLAYER_TAIL ACS_CKBOARD
 
 /* Food character */
-#define FOOD '@'
+#define FOOD_NORMAL_CHAR 'O'
+#define FOOD_USELESS_CHAR 'O'
+#define FOOD_DOUBLE_CHAR '@'
 
 /* Game speed */
 #define TICKS_PER_SECOND 10

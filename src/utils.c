@@ -24,6 +24,7 @@ void init_cnake() {
   }
   start_color(); // Enable colors
 
-  init_pair(1, COLOR_RED, COLOR_BLACK);   // Red text on black background
-  init_pair(2, COLOR_GREEN, COLOR_BLACK); // Green text on black background
+  init_pair(1, COLOR_RED, COLOR_BLACK);     // Red text on black background
+  init_pair(2, COLOR_GREEN, COLOR_BLACK);   // Green text on black background
+  init_pair(3, COLOR_MAGENTA, COLOR_BLACK); // Magenta text on black background
 }

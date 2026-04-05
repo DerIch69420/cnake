@@ -193,8 +193,62 @@ static void _move(Direction direction) {
   }
   }
 
+  FoodType old_type = food->food_type;
   if (!check_food(head, &food)) {
     tail = free_tail(tail);
+  } else {
+
+    switch (old_type) {
+    case FOOD_NORMAL: {
+      break;
+    }
+    case FOOD_USELESS: {
+      tail = free_tail(tail);
+      break;
+    }
+    case FOOD_DOUBLE: {
+      switch (direction) {
+      case LEFT: {
+        head = push_head(head, head->x - 1, head->y);
+        break;
+      }
+
+      case RIGHT: {
+        head = push_head(head, head->x + 1, head->y);
+        break;
+      }
+
+      case UP: {
+        head = push_head(head, head->x, head->y - 1);
+        break;
+      }
+      case DOWN: {
+        head = push_head(head, head->x, head->y + 1);
+        break;
+      }
+      case NONE_DIR: {
+        // Do not move or do anything else
+        return;
+      }
+      }
+    }
+    case FOOD_TYPE_COUNT: {
+      break;
+    }
+    }
+  }
+  switch (check_colliding(head)) {
+  case COLLIDE_WITH_WALL: {
+    _collide_with_wall();
+    break;
+  }
+  case COLLIDE_WITH_SELF: {
+    _collide_with_self();
+    break;
+  }
+  case NOT_COLLIDING: {
+    break;
+  }
   }
 }
 

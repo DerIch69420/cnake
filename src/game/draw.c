@@ -30,9 +30,39 @@ static void _draw_snake(SnakeNode *head) {
 }
 
 static void _draw_food(Food *food) {
-  attron(COLOR_PAIR(2));
-  mvaddch(food->y, food->x, FOOD);
-  attroff(COLOR_PAIR(2));
+
+  char food_char;
+
+  switch (food->food_type) {
+  case FOOD_NORMAL:
+    attron(COLOR_PAIR(2)); // Green
+    food_char = FOOD_NORMAL_CHAR;
+    break;
+  case FOOD_DOUBLE:
+    attron(COLOR_PAIR(3)); // Magenta
+    food_char = FOOD_DOUBLE_CHAR;
+    break;
+  case FOOD_USELESS:
+  default:
+    // Use no color pair
+    food_char = FOOD_USELESS_CHAR;
+    break;
+  }
+
+  mvaddch(food->y, food->x, food_char);
+
+  // Turn off the color pair after drawing
+  switch (food->food_type) {
+  case FOOD_NORMAL:
+    attroff(COLOR_PAIR(2));
+    break;
+  case FOOD_DOUBLE:
+    attroff(COLOR_PAIR(3));
+    break;
+  case FOOD_USELESS:
+  default:
+    break;
+  }
 }
 
 static void _draw_borders() {
