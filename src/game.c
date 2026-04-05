@@ -6,10 +6,10 @@
 #include <stdbool.h>
 #include <stdlib.h>
 
-#include "food.h"
 #include "game.h"
 #include "game/colliding.h"
 #include "game/draw.h"
+#include "game/food.h"
 #include "game_settings.h"
 #include "snake.h"
 
@@ -42,7 +42,6 @@ static void _tick();
 static PlayerAction _user_input(int key);
 static void _do_action(PlayerAction action);
 static void _move(Direction direction);
-static bool _check_food();
 static void _collide_with_wall();
 static void _collide_with_self();
 
@@ -194,19 +193,10 @@ static void _move(Direction direction) {
   }
   }
 
-  if (!_check_food()) {
+  if (!check_food(head, &food)) {
     tail = free_tail(tail);
   }
 }
 
 static void _collide_with_wall() { gameRunning = 0; }
 static void _collide_with_self() { gameRunning = 0; }
-
-static bool _check_food() {
-  if ((food->x == head->x) && (food->y == head->y)) {
-    food = generate_food(X_MIN, X_MAX, Y_MIN, Y_MAX);
-    return true;
-  } else {
-    return false;
-  }
-}
