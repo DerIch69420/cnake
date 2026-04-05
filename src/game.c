@@ -205,8 +205,8 @@ static void _collide_with_self() { gameRunning = 0; }
 static bool _check_food() {
   if ((food->x == head->x) && (food->y == head->y)) {
     food = generate_food(X_MIN, X_MAX, Y_MIN, Y_MAX);
-    return TRUE;
+    return true;
   } else {
-    return FALSE;
+    return false;
   }
 }
