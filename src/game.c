@@ -4,6 +4,7 @@
 
 #include <ncurses.h>
 #include <stdbool.h>
+#include <stdlib.h>
 
 #include "food.h"
 #include "game.h"
@@ -52,6 +53,7 @@ void run_cnake() {
   _tick();
 
   free_snake(head);
+  free(food);
 }
 
 static void _setup() {
