@@ -10,8 +10,8 @@
 #include "game/colliding.h"
 #include "game/draw.h"
 #include "game/food.h"
+#include "game/snake.h"
 #include "game_settings.h"
-#include "snake.h"
 
 typedef enum {
   NONE,

@@ -6,7 +6,7 @@
 
 #include <stdbool.h>
 
-#include "../snake.h"
+#include "snake.h"
 
 typedef enum {
   NO_FOOD,
