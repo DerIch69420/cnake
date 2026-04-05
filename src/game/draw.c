@@ -4,7 +4,6 @@
 
 #include <ncurses.h>
 
-#include "../game.h"
 #include "draw.h"
 
 static void _draw_snake(SnakeNode *head);

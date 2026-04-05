@@ -8,6 +8,7 @@
 
 #include "food.h"
 #include "game.h"
+#include "game/colliding.h"
 #include "game/draw.h"
 #include "game_settings.h"
 #include "snake.h"
@@ -41,10 +42,9 @@ static void _tick();
 static PlayerAction _user_input(int key);
 static void _do_action(PlayerAction action);
 static void _move(Direction direction);
-static void _check_colliding();
+static bool _check_food();
 static void _collide_with_wall();
 static void _collide_with_self();
-static bool _check_food();
 
 void run_cnake() {
 
@@ -180,25 +180,22 @@ static void _move(Direction direction) {
   }
   }
 
-  _check_colliding();
+  switch (check_colliding(head)) {
+  case COLLIDE_WITH_WALL: {
+    _collide_with_wall();
+    break;
+  }
+  case COLLIDE_WITH_SELF: {
+    _collide_with_self();
+    break;
+  }
+  case NOT_COLLIDING: {
+    break;
+  }
+  }
 
   if (!_check_food()) {
     tail = free_tail(tail);
-  }
-}
-
-static void _check_colliding() {
-  // Colliding with wall
-  if ((head->x < X_MIN) || (head->x > X_MAX) || (head->y < Y_MIN) ||
-      (head->y > Y_MAX)) {
-    _collide_with_wall();
-  }
-
-  SnakeNode *bodyPart = head;
-  while ((bodyPart = get_next(bodyPart))) {
-    if ((head->x == bodyPart->x) && (head->y == bodyPart->y)) {
-      _collide_with_self();
-    }
   }
 }
 
