@@ -8,6 +8,8 @@
 
 #include "food.h"
 #include "game.h"
+#include "game/draw.h"
+#include "game_settings.h"
 #include "snake.h"
 
 typedef enum {
@@ -35,9 +37,6 @@ static Direction currentDirection = RIGHT;
 static void _setup();
 static void _tick();
 
-static void _draw_borders();
-static void _draw_snake();
-static void _draw_food();
 static PlayerAction _user_input(int key);
 static void _do_action(PlayerAction action);
 static void _move(Direction direction);
@@ -68,9 +67,7 @@ static void _setup() {
 
   food = generate_food(X_MIN, X_MAX, Y_MIN, Y_MAX);
 
-  _draw_snake();
-  _draw_borders();
-  _draw_food();
+  draw_game(head, food);
 
   refresh();
 }
@@ -90,31 +87,9 @@ static void _tick() {
 
     clear();
 
-    _draw_snake();
-    _draw_borders();
-    _draw_food();
+    draw_game(head, food);
     refresh();
   }
-}
-
-static void _draw_borders() {
-  // Horizontal bars
-  for (int i = X_MIN; i <= X_MAX; i++) {
-    mvaddch(Y_MIN - 1, i, ACS_HLINE);
-    mvaddch(Y_MAX + 1, i, ACS_HLINE);
-  }
-
-  // Vertical bars
-  for (int i = Y_MIN; i <= Y_MAX; i++) {
-    mvaddch(i, X_MIN - 1, ACS_VLINE);
-    mvaddch(i, X_MAX + 1, ACS_VLINE);
-  }
-
-  // Corners
-  mvaddch(Y_MIN - 1, X_MIN - 1, ACS_ULCORNER);
-  mvaddch(Y_MIN - 1, X_MAX + 1, ACS_URCORNER);
-  mvaddch(Y_MAX + 1, X_MIN - 1, ACS_LLCORNER);
-  mvaddch(Y_MAX + 1, X_MAX + 1, ACS_LRCORNER);
 }
 
 static PlayerAction _user_input(int key) {
@@ -205,25 +180,6 @@ static void _move(Direction direction) {
   if (!_check_food()) {
     tail = free_tail(tail);
   }
-}
-
-static void _draw_snake() {
-  // Draw body
-  SnakeNode *body = head;
-  while ((body = get_next(body))) {
-    mvaddch(body->y, body->x, PLAYER_TAIL);
-  }
-
-  // Draw head
-  attron(COLOR_PAIR(1));
-  mvaddch(head->y, head->x, PLAYER_HEAD);
-  attroff(COLOR_PAIR(1));
-}
-
-static void _draw_food() {
-  attron(COLOR_PAIR(2));
-  mvaddch(food->y, food->x, FOOD);
-  attroff(COLOR_PAIR(2));
 }
 
 static void _check_colliding() {

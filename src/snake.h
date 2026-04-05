@@ -2,6 +2,8 @@
  * src/snake.h
  */
 
+#pragma once
+
 typedef struct SnakeNode {
   int x;
   int y;
