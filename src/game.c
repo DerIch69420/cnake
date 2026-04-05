@@ -26,13 +26,14 @@ typedef enum {
   RIGHT,
   UP,
   DOWN,
+  NONE_DIR, // Player won't move in this state
 } Direction;
 
 static SnakeNode *head;
 static SnakeNode *tail;
 static Food *food;
 static int gameRunning = 1;
-static Direction currentDirection = RIGHT;
+static Direction currentDirection = NONE_DIR;
 
 static void _setup();
 static void _tick();
@@ -172,6 +173,10 @@ static void _move(Direction direction) {
   case DOWN: {
     head = push_head(head, head->x, head->y + 1);
     break;
+  }
+  case NONE_DIR: {
+    // Do not move or do anything else
+    return;
   }
   }
 
