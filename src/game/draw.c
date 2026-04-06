@@ -16,6 +16,39 @@ void draw_game(SnakeNode *head, Food *food) {
   _draw_food(food);
 }
 
+#ifdef DEBUG
+static void _draw_snake(SnakeNode *head) {
+  // Draw body
+  SnakeNode *body = head;
+  int row = 0; // row on top of the screen for debug info
+  mvprintw(row, 0, "Snake coords (x,y) and drawn pos:");
+  row++;
+
+  int segment_index = 0;
+  while ((body = get_next(body))) {
+    // Draw body segment
+    mvaddch(body->y, body->x, PLAYER_TAIL);
+    mvaddch(body->y, body->x + 1, PLAYER_TAIL);
+
+    // Debug info
+    mvprintw(row, 0, "Segment %2d: (x=%2d,y=%2d) drawn at y=%2d, x=%2d/%2d",
+             segment_index, body->x, body->y, body->y, body->x, body->x + 1);
+    row++;
+    segment_index++;
+  }
+
+  // Draw head
+  attron(COLOR_PAIR(1));
+  mvaddch(head->y, head->x, PLAYER_HEAD);
+  mvaddch(head->y, head->x + 1, PLAYER_HEAD);
+  attroff(COLOR_PAIR(1));
+
+  // Debug info for head
+  mvprintw(row, 0, "Head: (x=%2d,y=%2d) drawn at y=%2d, x=%2d/%2d", head->x,
+           head->y, head->y, head->x, head->x + 1);
+}
+
+#else
 static void _draw_snake(SnakeNode *head) {
   // Draw body
   SnakeNode *body = head;
@@ -30,6 +63,7 @@ static void _draw_snake(SnakeNode *head) {
   mvaddch(head->y, head->x + 1, PLAYER_HEAD);
   attroff(COLOR_PAIR(1));
 }
+#endif
 
 static void _draw_food(Food *food) {
 

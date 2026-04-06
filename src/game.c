@@ -60,8 +60,8 @@ static void _setup() {
   clear();
 
   head = create_head(START_X, START_Y);
-  tail = add_segment(head, head->x - 1, head->y);
-  tail = add_segment(tail, head->x - 2, head->y);
+  tail = add_segment(head, head->x - 2, head->y);
+  tail = add_segment(tail, tail->x - 2, tail->y);
 
   food = generate_food(X_MIN, X_MAX, Y_MIN, Y_MAX);
 
@@ -154,16 +154,12 @@ static void _do_action(PlayerAction action) {
 static void _move(Direction direction) {
   switch (direction) {
   case LEFT: {
-    head = push_head(head, head->x - 1, head->y);
-    head = push_head(head, head->x - 1, head->y);
-    tail = free_tail(tail);
+    head = push_head(head, head->x - 2, head->y);
     break;
   }
 
   case RIGHT: {
-    head = push_head(head, head->x + 1, head->y);
-    head = push_head(head, head->x + 1, head->y);
-    tail = free_tail(tail);
+    head = push_head(head, head->x + 2, head->y);
     break;
   }
 
@@ -211,16 +207,12 @@ static void _move(Direction direction) {
     case FOOD_DOUBLE: {
       switch (direction) {
       case LEFT: {
-        head = push_head(head, head->x - 1, head->y);
-        head = push_head(head, head->x - 1, head->y);
-        tail = free_tail(tail);
+        head = push_head(head, head->x - 2, head->y);
         break;
       }
 
       case RIGHT: {
-        head = push_head(head, head->x + 1, head->y);
-        head = push_head(head, head->x + 1, head->y);
-        tail = free_tail(tail);
+        head = push_head(head, head->x + 2, head->y);
         break;
       }
 

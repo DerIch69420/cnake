@@ -26,4 +26,7 @@
 #define FOOD_DOUBLE_CHAR '@'
 
 /* Game speed */
-#define TICKS_PER_SECOND 8
+#define TICKS_PER_SECOND 10
+
+/* Debug info */
+// #define DEBUG
