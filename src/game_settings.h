@@ -7,7 +7,7 @@
 /* Map size */
 #define X_MIN 1
 // This is the max of the terminal, not the max of the map
-#define X_MAX_TERMINAL 75
+#define X_MAX_TERMINAL 101
 #define X_MAX (X_MAX_TERMINAL / 2 - X_MIN)
 #define Y_MIN 1
 #define Y_MAX 25

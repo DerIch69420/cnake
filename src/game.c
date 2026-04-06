@@ -155,11 +155,15 @@ static void _move(Direction direction) {
   switch (direction) {
   case LEFT: {
     head = push_head(head, head->x - 1, head->y);
+    head = push_head(head, head->x - 1, head->y);
+    tail = free_tail(tail);
     break;
   }
 
   case RIGHT: {
     head = push_head(head, head->x + 1, head->y);
+    head = push_head(head, head->x + 1, head->y);
+    tail = free_tail(tail);
     break;
   }
 
@@ -208,11 +212,15 @@ static void _move(Direction direction) {
       switch (direction) {
       case LEFT: {
         head = push_head(head, head->x - 1, head->y);
+        head = push_head(head, head->x - 1, head->y);
+        tail = free_tail(tail);
         break;
       }
 
       case RIGHT: {
         head = push_head(head, head->x + 1, head->y);
+        head = push_head(head, head->x + 1, head->y);
+        tail = free_tail(tail);
         break;
       }
 
