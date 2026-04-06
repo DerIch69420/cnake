@@ -6,7 +6,9 @@
 
 /* Map size */
 #define X_MIN 1
-#define X_MAX 75
+// This is the max of the terminal, not the max of the map
+#define X_MAX_TERMINAL 75
+#define X_MAX (X_MAX_TERMINAL / 2 - X_MIN)
 #define Y_MIN 1
 #define Y_MAX 25
 
@@ -24,4 +26,4 @@
 #define FOOD_DOUBLE_CHAR '@'
 
 /* Game speed */
-#define TICKS_PER_SECOND 10
+#define TICKS_PER_SECOND 8

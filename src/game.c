@@ -60,10 +60,8 @@ static void _setup() {
   clear();
 
   head = create_head(START_X, START_Y);
-  tail = add_segment(head, START_X - 1, START_Y);
-  tail = add_segment(tail, START_X - 2, START_Y);
-  tail = add_segment(tail, START_X - 3, START_Y);
-  head = push_head(head, START_X + 1, START_Y);
+  tail = add_segment(head, head->x - 1, head->y);
+  tail = add_segment(tail, head->x - 2, head->y);
 
   food = generate_food(X_MIN, X_MAX, Y_MIN, Y_MAX);
 

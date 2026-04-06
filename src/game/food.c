@@ -49,7 +49,8 @@ Food *generate_food(int x_min, int x_max, int y_min, int y_max) {
 }
 
 bool check_food(SnakeNode *head, Food **food) {
-  if (((*food)->x == head->x) && ((*food)->y == head->y)) {
+  if ((((*food)->x == head->x) && ((*food)->y == head->y)) ||
+      (((*food)->x == head->x + 1) && ((*food)->y == head->y))) {
     Food *new_food = generate_food(X_MIN, X_MAX, Y_MIN, Y_MAX);
 
     if (new_food) {

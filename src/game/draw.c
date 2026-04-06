@@ -21,11 +21,13 @@ static void _draw_snake(SnakeNode *head) {
   SnakeNode *body = head;
   while ((body = get_next(body))) {
     mvaddch(body->y, body->x, PLAYER_TAIL);
+    mvaddch(body->y, body->x + 1, PLAYER_TAIL);
   }
 
   // Draw head
   attron(COLOR_PAIR(1));
   mvaddch(head->y, head->x, PLAYER_HEAD);
+  mvaddch(head->y, head->x + 1, PLAYER_HEAD);
   attroff(COLOR_PAIR(1));
 }
 
@@ -67,7 +69,7 @@ static void _draw_food(Food *food) {
 
 static void _draw_borders() {
   // Horizontal bars
-  for (int i = X_MIN; i <= X_MAX; i++) {
+  for (int i = X_MIN; i <= X_MAX_TERMINAL; i++) {
     mvaddch(Y_MIN - 1, i, ACS_HLINE);
     mvaddch(Y_MAX + 1, i, ACS_HLINE);
   }
@@ -75,12 +77,12 @@ static void _draw_borders() {
   // Vertical bars
   for (int i = Y_MIN; i <= Y_MAX; i++) {
     mvaddch(i, X_MIN - 1, ACS_VLINE);
-    mvaddch(i, X_MAX + 1, ACS_VLINE);
+    mvaddch(i, X_MAX_TERMINAL + 1, ACS_VLINE);
   }
 
   // Corners
   mvaddch(Y_MIN - 1, X_MIN - 1, ACS_ULCORNER);
-  mvaddch(Y_MIN - 1, X_MAX + 1, ACS_URCORNER);
+  mvaddch(Y_MIN - 1, X_MAX_TERMINAL + 1, ACS_URCORNER);
   mvaddch(Y_MAX + 1, X_MIN - 1, ACS_LLCORNER);
-  mvaddch(Y_MAX + 1, X_MAX + 1, ACS_LRCORNER);
+  mvaddch(Y_MAX + 1, X_MAX_TERMINAL + 1, ACS_LRCORNER);
 }

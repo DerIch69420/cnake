@@ -12,7 +12,7 @@ SnakeNode *create_head(int x, int y) {
     return NULL;
   }
 
-  head->x = x;
+  head->x = x * 2;
   head->y = y;
   head->next = NULL;
   head->previous = NULL;

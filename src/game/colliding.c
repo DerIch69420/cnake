@@ -7,15 +7,16 @@
 
 Colliding check_colliding(SnakeNode *head) {
   // Colliding with wall
-  if ((head->x < X_MIN) || (head->x > X_MAX) || (head->y < Y_MIN) ||
-      (head->y > Y_MAX)) {
+  if ((head->x < X_MIN) || (head->x + 1 > X_MAX_TERMINAL) ||
+      (head->y < Y_MIN) || (head->y > Y_MAX)) {
     return COLLIDE_WITH_WALL;
   }
 
   // Colliding with itself
   SnakeNode *bodyPart = head;
   while ((bodyPart = get_next(bodyPart))) {
-    if ((head->x == bodyPart->x) && (head->y == bodyPart->y)) {
+    if (((head->x == bodyPart->x) && (head->y == bodyPart->y)) ||
+        ((head->x == bodyPart->x) && (head->y == bodyPart->y))) {
       return COLLIDE_WITH_SELF;
     }
   }
